@@ -1,5 +1,5 @@
-import ExpensesTable from "../ui/dashboard/ExpensesTable"
-import NewExpenseDialog from "../ui/expenses/new-expense-dialog"
+import ExpensesTable from "../../ui/dashboard/ExpensesTable"
+import NewExpenseDialog from "../../ui/expenses/new-expense-dialog"
 
 export default function ExpensesPage(){
     return(

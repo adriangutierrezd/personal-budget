@@ -1,5 +1,5 @@
-import CategoriesTable from "../ui/categories/CategoriesTable";
-import NewCategoryDialog from "../ui/categories/new-category-dialog";
+import CategoriesTable from "../../ui/categories/CategoriesTable";
+import NewCategoryDialog from "../../ui/categories/new-category-dialog";
 export default function CategoriesPage(){
     return(
         <main className="p-6 max-w-7xl mx-auto">

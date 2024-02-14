@@ -11,9 +11,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import ExpensesByMonth from "../ui/statics/expenses-by-month";
-import ExpensesByCategory from "../ui/statics/ExpensesByCategory"
-import ExpensesTable from "../ui/statics/ExpensesTable"
+import ExpensesByMonth from "../../ui/statics/expenses-by-month";
+import ExpensesByCategory from "../../ui/statics/ExpensesByCategory"
+import ExpensesTable from "../../ui/statics/ExpensesTable"
 
 export default function StaticsPage(){
     const [date, setDate] = React.useState<DateRange | undefined>({

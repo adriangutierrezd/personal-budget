@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/popover"
 
 
-import NewIncomeDialog from "../ui/income/new-income-dialog";
-import IncomeTable from "../ui/income/IncomeTable";
+import NewIncomeDialog from "../../ui/income/new-income-dialog";
+import IncomeTable from "../../ui/income/IncomeTable";
 
 
 export default function IncomesPage(){

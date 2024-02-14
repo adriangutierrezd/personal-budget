@@ -1,5 +1,5 @@
-import RecurringTable from "../ui/recurring/RecurringTable";
-import NewRecurringDialog from "../ui/recurring/new-recurring-dialog";
+import RecurringTable from "../../ui/recurring/RecurringTable";
+import NewRecurringDialog from "../../ui/recurring/new-recurring-dialog";
 export default function CategoriesPage(){
     return(
         <main className="p-6 max-w-7xl mx-auto">
