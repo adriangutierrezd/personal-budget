@@ -20,12 +20,19 @@ export default function StatsCards() {
   const [totalSaved, setTotalSaved] = useState<number>(0)
 
   useEffect(() => {
-    getSession().then((data) => {
+    fetchData()
+  })
+
+  
+
+  const fetchData = async () => {
+    const data = await getSession()
+    if(data){
         fetchExpenses(data)
         fetchRevenues(data)
         setTotalSaved(totalRevenue - totalExpense)
-    })
-  })
+    }
+  } 
 
   const fetchExpenses = async (data) => {
       const expenses = await getExpenses(data.user.token, startOfMonth, endOfMonth)
