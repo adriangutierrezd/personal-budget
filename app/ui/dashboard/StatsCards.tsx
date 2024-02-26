@@ -1,57 +1,14 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrencyEuroIcon, CreditCardIcon, WalletIcon } from "@heroicons/react/24/outline";
-import { useState, useEffect } from "react";
-import moment from 'moment'
-import { getRevenues } from "@/lib/services/revenueService";
-import { getExpenses } from "@/lib/services/expenseService";
-import { getSession } from "next-auth/react";
-import { Expense, Revenue } from "@/types/api";
 
+interface Props {
+    readonly totalRevenue: number,
+    readonly totalExpense: number,
+    readonly totalSaved: number
+}
 
-export default function StatsCards() {
-
-
-  const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-  const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
-
-  const [totalRevenue, setTotalRevenue] = useState<number>(0)
-  const [totalExpense, setTotalExpense] = useState<number>(0)
-  const [totalSaved, setTotalSaved] = useState<number>(0)
-
-  useEffect(() => {
-    fetchData()
-  })
-
-  
-
-  const fetchData = async () => {
-    const data = await getSession()
-    if(data){
-        fetchExpenses(data)
-        fetchRevenues(data)
-        setTotalSaved(totalRevenue - totalExpense)
-    }
-  } 
-
-  const fetchExpenses = async (data) => {
-      const expenses = await getExpenses(data.user.token, startOfMonth, endOfMonth)
-      let expense = 0
-      expenses.data.forEach((e: Expense) => {
-          expense += e.amount
-      })
-      setTotalExpense(expense)
-  }
-
-  const fetchRevenues = async (data) => {
-      const revenues = await getRevenues(data.user.token, startOfMonth, endOfMonth)
-      let totalRevenue = 0
-      revenues.data.forEach((e: Revenue) => {
-          totalRevenue += e.amount
-      })
-      setTotalRevenue(totalRevenue)
-  }
-
+export default function StatsCards({totalSaved, totalExpense, totalRevenue}: Props) {
 
     return (
         <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
