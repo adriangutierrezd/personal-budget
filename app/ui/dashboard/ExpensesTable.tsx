@@ -3,7 +3,7 @@ import { Expense } from "@/types/api";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { getSession } from "next-auth/react";
-import { getExpenses, updateExpense, storeExpense, destroyExpense } from "@/lib/services/expenseService";
+import {  updateExpense, storeExpense, destroyExpense } from "@/lib/services/expenseService";
 import { DataTable } from "../components/datatable";
 import { ColumnDef, Row } from "@tanstack/react-table"
 import { PencilIcon, TrashIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
@@ -61,12 +61,15 @@ const expenseForm = z.object({
 })
 
 
-export default function ExpensesTable() {
+interface Props{
+  readonly data: Expense[];
+  readonly reload: () => void
+}
 
-  const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-  const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+export default function ExpensesTable({data, reload}: Props) {
+
+
   const [loading, setLoading] = useState<boolean>(true)
-  const [expenses, setExpenses] = useState<Expense[]>([])
   const [categories, setCategories] = useState<any[]>([])
   const [userData, setUserData] = useState<Session>()
   const {toast} = useToast()
@@ -83,15 +86,6 @@ export default function ExpensesTable() {
     if(data){
       setUserData(data)
 
-      const expenses = await getExpenses(data.user.token, startOfMonth, endOfMonth)
-      setExpenses(expenses.data.map((expense: Expense) => {
-        return {
-          ...expense,
-          amount: expense.amount.toLocaleString('es-ES'),
-          date: moment(expense.date).format('DD-MM-YYYY')
-        }
-      }))
-  
       const categories = await getCategories(data.user.token)
       setCategories(categories.data)
     }
@@ -121,7 +115,7 @@ export default function ExpensesTable() {
         description: "Gasto actualizado con éxito",
       })
 
-      fetchData()
+      reload()
     }catch(error: any){
       toast({
         variant: "destructive",
@@ -150,7 +144,7 @@ export default function ExpensesTable() {
         description: "Gasto añadido con éxito",
       })
 
-      fetchData()
+      reload()
     }catch(error: any){
       toast({
         variant: "destructive",
@@ -179,7 +173,7 @@ export default function ExpensesTable() {
         description: "Gasto eliminado con éxito",
       })
 
-      fetchData()
+      reload()
     }catch(error: any){
       toast({
         variant: "destructive",
@@ -188,7 +182,6 @@ export default function ExpensesTable() {
       })
     }
   }
-
 
   const columns: ColumnDef<Expense>[] = [
     {
@@ -220,7 +213,7 @@ export default function ExpensesTable() {
         <div className="flex items-center justify-end mb-4">
           <NewExpenseDialog handleNewExpense={handleNewExpense} categories={categories} />
         </div>
-        <DataTable columns={columns} data={expenses} />
+        <DataTable columns={columns} data={data} />
       </>)}
     </div>
   )

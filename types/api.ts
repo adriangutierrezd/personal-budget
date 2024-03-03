@@ -1,7 +1,7 @@
 export type Expense = {
     id: number;
     userId: number;
-    categoryId: number | Category;
+    categoryId: number;
     name: string;
     description: string | null;
     date: string;
@@ -9,6 +9,7 @@ export type Expense = {
     month: number;
     year: number;
     amount: number;
+    category?: Category
 }
 
 export type Revenue = {

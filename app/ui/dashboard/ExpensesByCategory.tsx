@@ -21,36 +21,41 @@ import {
   
 
   export const options = {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
     responsive: true,
     plugins: {
       legend: {
         position: 'top' as const,
       },
-      title: {
-        display: true,
-        text: 'Chart.js Bar Chart',
-      },
     },
   };
   
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  
-  export const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: labels.map(() => Math.random() * 100),
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Dataset 2',
-        data: labels.map(() => Math.random() * 100),
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-  };
 
-  export default function ExpensesByCategory() {
-    return <Bar options={options} data={data} />;
+
+  interface Props {
+    readonly expensesByCategory: Array<any>
+  }
+
+  export default function ExpensesByCategory({ expensesByCategory }: Props) {
+
+    const data = {
+      labels: expensesByCategory.map((data) => data.name),
+      datasets: [
+        {
+          label: 'Prueba label dataset',
+          data: expensesByCategory.map((data) => data.total),
+          backgroundColor: expensesByCategory.map((data) => data.color)
+        }
+      ],
+    }
+
+    return (
+      <div>
+        <Bar options={options} data={data} />
+      </div>
+    )
   }
