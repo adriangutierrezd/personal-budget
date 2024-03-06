@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover"
 
 import NewRevenueDialog from '@/app/ui/income/new-revenue-dialog';
-import RevenuesTable from "@/app/ui/income/IncomeTable";
+import RevenuesTable from "@/app/ui/income/revenues-table";
 import moment from "moment";
 import { getSession } from "next-auth/react";
 import { Revenue } from "@/types/api";

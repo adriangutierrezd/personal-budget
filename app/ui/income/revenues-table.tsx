@@ -1,8 +1,7 @@
 "use client"
 import { Revenue } from "@/types/api";
 import moment from "moment";
-import { useState, useEffect } from "react";
-import { getSession } from "next-auth/react";
+import { useState } from "react";
 import { DataTable } from "../components/datatable";
 import { ColumnDef, Row } from "@tanstack/react-table"
 import { PencilIcon, TrashIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
