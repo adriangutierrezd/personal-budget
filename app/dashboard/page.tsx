@@ -2,20 +2,24 @@
 import { useEffect, useState } from "react";
 import ExpensesByCategory from "../ui/dashboard/ExpensesByCategory";
 import StatsCards from "../ui/dashboard/StatsCards";
-import ExpensesTable from "../ui/dashboard/ExpensesTable";
+import ExpensesTable from "../ui/expenses/expenses-table";
 import { getSession } from "next-auth/react";
 import { getExpenses, getExpensesByCategory } from "@/lib/services/expenseService";
 import { getRevenues } from "@/lib/services/revenueService";
-import { Expense, Revenue } from "@/types/api";
+import { Category, Expense, Revenue } from "@/types/api";
 import moment from "moment";
 import { Session } from "next-auth";
+import { getCategories } from "@/lib/services/categoriesService";
+import NewExpenseDialog from "../ui/expenses/new-expense-dialog";
 
 export default function Dashboard () {
 
   const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
   const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
 
+  const [userData, setUserData] = useState<Session|undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [categories, setCategories] = useState<Category[]>([])
   const [expenses, setExpenses] = useState<Array<Expense>>([])
   const [revenues, setRevenues] = useState<Array<Revenue>>([])
   const [totalRevenue, setTotalRevenue] = useState<number>(0)
@@ -34,10 +38,12 @@ export default function Dashboard () {
     const data = await getSession()
 
     if(data){
-      const [expensesData, revenuesData, expenseByCategory] = await Promise.all([
+      setUserData(data)
+      const [expensesData, revenuesData, expenseByCategory, categoriesData] = await Promise.all([
         getExpenses(data.user.token, startOfMonth, endOfMonth),
         getRevenues(data.user.token, startOfMonth, endOfMonth),
-        getExpensesByCategory(data.user.token, startOfMonth, endOfMonth)
+        getExpensesByCategory(data.user.token, startOfMonth, endOfMonth),
+        getCategories(data.user.token)
       ])
 
       setExpenses(expensesData.data.map((expense: Expense) => {
@@ -48,6 +54,7 @@ export default function Dashboard () {
         }
       }))
 
+      setCategories(categoriesData.data)
       setRevenues(revenuesData.data)
       setExpensesByCategory(expenseByCategory.data)
       const { expensesSum, revenuesSum, saved } = getMainDataFromMonth(expensesData.data, revenuesData.data)
@@ -83,7 +90,10 @@ export default function Dashboard () {
       {isLoading ? (<p>Cargando...</p>) : (<>
         <StatsCards totalSaved={totalSaved} totalExpense={totalExpense} totalRevenue={totalRevenue} /> 
         <ExpensesByCategory expensesByCategory={expensesByCategory}/>
-        <ExpensesTable reload={fetchData} data={expenses}/>
+        <section className="flex items-center justify-end mb-4">
+        <NewExpenseDialog categories={categories} userData={userData} reload={fetchData}/>
+      </section>
+        <ExpensesTable categories={categories} userData={userData} reload={fetchData} data={expenses}/>
       </>)}
 
     </main>

@@ -1,6 +1,5 @@
 "use client"
 import { Expense, columns } from "../statics/expenses-columns"
-import { DataTable } from "../statics/expenses-data-table"
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { getSession } from "next-auth/react";
@@ -30,7 +29,6 @@ export default function ExpensesTable() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={expenses} />
     </div>
   )
 }
