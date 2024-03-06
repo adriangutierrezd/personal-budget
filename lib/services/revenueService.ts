@@ -15,3 +15,78 @@ export const getRevenues = async (token: string, startDate: string, endDate: str
         throw new Error(error.message)
     }
 }
+
+
+export const storeRevenue = async({
+    token,
+    props
+}: {
+    token: string,
+    props: object
+}) => {
+    try{
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues/`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(props)
+        })
+
+        return data
+    }catch(error: any){
+        throw new Error(error.message) as Error
+    }
+}
+
+export const destroyRevenue = async({
+    token,
+    revenueId
+}: {
+    token: string,
+    revenueId: number
+}) => {
+    try{
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues/${revenueId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+
+        return data
+    }catch(error: any){
+        throw new Error(error.message) as Error
+    }
+}
+
+
+export const updateRevenue = async({
+    token,
+    revenueId,
+    props
+}: {
+    token: string,
+    revenueId: number,
+    props: object
+}) => {
+    try{
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues/${revenueId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(props)
+        })
+
+        return data
+    }catch(error: any){
+        throw new Error(error.message) as Error
+    }
+}
