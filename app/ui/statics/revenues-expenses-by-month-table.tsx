@@ -1,13 +1,14 @@
 "use client"
 import { DataTable } from "../components/datatable";
 import { ColumnDef } from "@tanstack/react-table"
+import { MonthData } from "@/types/api";
 
 interface Props {
-    readonly data: any[];
+    readonly data: MonthData[];
 }
 
 export default function RevenuesExpensesByMonthTable({ data }: Props) {
-    const columns: ColumnDef<any>[] = [
+    const columns: ColumnDef<MonthData>[] = [
         {
             accessorKey: "monthName",
             header: "Mes",

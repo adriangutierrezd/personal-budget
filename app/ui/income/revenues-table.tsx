@@ -15,6 +15,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogAction,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -39,7 +40,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Session } from "next-auth";
-import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { destroyRevenue, updateRevenue } from "@/lib/services/revenueService";
 
 

@@ -31,20 +31,18 @@ export type Category = {
     userId: number;
 }
 
-type Session = {
-    user: {
-        token: string;
-        user: {
-            id: number;
-            name: string;
-            email: string;
-            email_verified_at: null | string;
-            created_at: string;
-            updated_at: string;
-        };
-        iat: number;
-        exp: number;
-        jti: string;
-    };
-    expires: string;
-};
+export type MonthData = {
+    monthName: string;
+    year: number;
+    earnedAmount: string | number;
+    spentAmount: string | number; 
+    totalSaved: string | number;  
+    savedPercentage: string | number;
+}
+
+export type MonthRawData = {
+    month: number;
+    year: number;
+    total: number;
+    yearMonth: string;
+  }

@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  AlertDialogAction
 } from "@/components/ui/alert-dialog"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -47,7 +48,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Session } from "next-auth";
-import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 
 
 interface Props{

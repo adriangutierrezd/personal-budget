@@ -20,6 +20,7 @@ import RevenuesExpensesByMonth from "@/app/ui/statics/revenues-expenses-by-month
 import { getRevenuesByMonth } from "@/lib/services/revenueService"
 import { MONTHS } from "@/lib/constants"
 import RevenuesExpensesByMonthTable from "@/app/ui/statics/revenues-expenses-by-month-table"
+import { MonthData, MonthRawData } from "@/types/api"
 
 export default function StaticsPage() {
 
@@ -32,7 +33,7 @@ export default function StaticsPage() {
   const [expensesByMonth, setExpensesByMonth] = useState<Array<any>>([])
   const [revenuesByMonth, setRevenuesByMonth] = useState<Array<any>>([])
   const [expensesByCategory, setExpensesByCategory] = useState<Array<any>>([])
-  const [revExpData, setRevExpData] = useState<Array<any>>([])
+  const [revExpData, setRevExpData] = useState<Array<MonthData>>([])
   const [date, setDate] = useState<DateRange | undefined>({
     from: startDate.toDate(),
     to: endDate.toDate(),
@@ -57,9 +58,9 @@ export default function StaticsPage() {
       setExpensesByCategory(expenseByCategoryData.data)
       setRevenuesByMonth(revByMonth.data)
       setExpensesByMonth(expByMonth.data)
-
-      const revExp = []
-      revByMonth.data.forEach((rev: any, index: number) => {
+      
+      const revExp: MonthData[] = []
+      revByMonth.data.forEach((rev: MonthRawData, index: number) => {
         revExp[index] = {
           monthName: MONTHS[rev.month - 1],
           year: rev.year,
@@ -70,12 +71,12 @@ export default function StaticsPage() {
         }
       })
 
-      expByMonth.data.forEach((exp: any, index: number) => {
+      expByMonth.data.forEach((exp: MonthRawData, index: number) => {
         revExp[index] = {
           ...revExp[index],
           spentAmount: exp.total,
-          totalSaved: revExp[index].earnedAmount - exp.total,
-          savedPercentage: ((revExp[index].earnedAmount - exp.total)/revExp[index].earnedAmount*100).toFixed(2)
+          totalSaved: Number(revExp[index].earnedAmount) - exp.total,
+          savedPercentage: ((Number(revExp[index].earnedAmount)- exp.total)/Number(revExp[index].earnedAmount)*100).toFixed(2)
         }
       })
 
