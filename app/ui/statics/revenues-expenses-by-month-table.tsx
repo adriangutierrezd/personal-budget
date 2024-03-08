@@ -2,46 +2,41 @@
 import { DataTable } from "../components/datatable";
 import { ColumnDef } from "@tanstack/react-table"
 
-
-
-interface Props{
+interface Props {
     readonly data: any[];
-  }
-  
+}
 
-export default function RevenuesExpensesByMonthTable({data}: Props){
+export default function RevenuesExpensesByMonthTable({ data }: Props) {
     const columns: ColumnDef<any>[] = [
         {
-          accessorKey: "monthName",
-          header: "Mes",
+            accessorKey: "monthName",
+            header: "Mes",
         },
         {
-          accessorKey: "year",
-          header: "Año",
+            accessorKey: "year",
+            header: "Año",
         },
         {
             accessorKey: "earnedAmount",
             header: "Ingresos",
-          },
-        {
-          accessorKey: "spentAmount",
-          header: "Gastos",
         },
         {
-          accessorKey: "totalSaved",
-          header: "Ahorro",
+            accessorKey: "spentAmount",
+            header: "Gastos",
+        },
+        {
+            accessorKey: "totalSaved",
+            header: "Ahorro",
         },
         {
             accessorKey: "savedPercentage",
             header: "% Ahorro",
-          },
-      ]
+        },
+    ]
 
-      console.log(data)
-    
-      return (
+    return (
         <div className="mx-auto py-10">
-        <DataTable columns={columns} data={data} />
+            <DataTable columns={columns} data={data} />
         </div>
-      )
+    )
 }

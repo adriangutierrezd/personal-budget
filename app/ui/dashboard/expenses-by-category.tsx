@@ -1,4 +1,5 @@
 "use client"
+import { hexToRgba } from '@/lib/utils';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -27,11 +28,6 @@ import {
       }
     },
     responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-    },
   };
   
 
@@ -42,13 +38,16 @@ import {
 
   export default function ExpensesByCategory({ expensesByCategory }: Props) {
 
+
     const data = {
       labels: expensesByCategory.map((data) => data.name),
       datasets: [
         {
-          label: 'Prueba label dataset',
+          label: 'Gasto por categoría',
           data: expensesByCategory.map((data) => data.total),
-          backgroundColor: expensesByCategory.map((data) => data.color)
+          backgroundColor: expensesByCategory.map((data) => hexToRgba(data.color, 0.6)),
+          borderColor: expensesByCategory.map((data) => hexToRgba(data.color, 1)),
+          borderWidth: 2,
         }
       ],
     }

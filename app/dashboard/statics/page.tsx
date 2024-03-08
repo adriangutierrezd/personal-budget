@@ -13,7 +13,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { ArrowPathIcon } from "@heroicons/react/24/outline"
-import { Session } from "next-auth"
 import { getSession } from "next-auth/react"
 import { getExpensesByCategory, getExpensesByMonth } from "@/lib/services/expenseService"
 import ExpensesByCategory from "@/app/ui/dashboard/expenses-by-category"
@@ -148,10 +147,10 @@ export default function StaticsPage() {
           <ArrowPathIcon className="h-4 w-4" />
         </Button>
       </div>
-      <h2>Ingresos y gastos por mes</h2>
+      <h2 className="font-semibold my-3">Ingresos y gastos por mes</h2>
       <RevenuesExpensesByMonth expensesByMonth={expensesByMonth} revenuesByMonth={revenuesByMonth} />
       <RevenuesExpensesByMonthTable data={revExpData} />
-      <h2>Gastos totales por categoría</h2>
+      <h2 className="font-semibold my-3">Gastos totales por categoría</h2>
       <ExpensesByCategory expensesByCategory={expensesByCategory} />
     </main>
   )
