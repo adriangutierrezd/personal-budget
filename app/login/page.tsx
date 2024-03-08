@@ -3,6 +3,15 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<string[]>([]);
@@ -29,10 +38,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+<div className="flex min-h-screen flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Login</CardTitle>
+      </CardHeader>
+      
       <form onSubmit={handleSubmit}>
-        <input
+      <CardContent>
+        <Input
           type="email"
           placeholder="test@test.com"
           name="email"
@@ -40,7 +54,7 @@ const LoginPage = () => {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-        <input
+        <Input
           type="password"
           placeholder="123123"
           name="password"
@@ -48,12 +62,10 @@ const LoginPage = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button
-          type="submit"
-          className="btn btn-primary"
-        >
-          Login
-        </button>
+        </CardContent>
+      <CardFooter className="flex justify-end">
+        <Button>Login</Button>
+      </CardFooter>
       </form>
 
       {errors.length > 0 && (
@@ -65,6 +77,7 @@ const LoginPage = () => {
           </ul>
         </div>
       )}
+    </Card>
     </div>
   );
 };
