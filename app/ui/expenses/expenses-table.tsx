@@ -1,14 +1,13 @@
 "use client"
 import { Category, Expense } from "@/types/api";
 import moment from "moment";
-import { useState, useEffect } from "react";
-import {  updateExpense, storeExpense, destroyExpense } from "@/lib/services/expenseService";
+import { useState } from "react";
+import {  updateExpense, destroyExpense } from "@/lib/services/expenseService";
 import { DataTable } from "../components/datatable";
 import { ColumnDef, Row } from "@tanstack/react-table"
 import { PencilIcon, TrashIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { z } from "zod"
 import { Textarea } from "@/components/ui/textarea"
-import { getCategories } from "@/lib/services/categoriesService";
 import { useToast } from "@/components/ui/use-toast"
 import {
   AlertDialog,

@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
-import ExpensesByCategory from "../ui/dashboard/ExpensesByCategory";
+import ExpensesByCategory from "../ui/dashboard/expenses-by-category";
 import StatsCards from "../ui/dashboard/StatsCards";
 import ExpensesTable from "../ui/expenses/expenses-table";
 import { getSession } from "next-auth/react";
