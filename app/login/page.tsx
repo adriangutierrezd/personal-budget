@@ -12,16 +12,26 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 
 const LoginPage = () => {
-  const [errors, setErrors] = useState<string[]>([]);
-  const [email, setEmail] = useState<string>("admin@admin.com");
-  const [password, setPassword] = useState<string>("password");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const router = useRouter();
+  const { toast } = useToast()
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrors([]);
+    if(email.trim() === '' || password.trim() === ''){
+      toast({
+        title: 'Error',
+        description: 'Rellena los campos antes de enviar el formulario',
+        variant: 'destructive'
+      })
+      return
+    }
 
     const responseNextAuth = await signIn("credentials", {
       email,
@@ -30,8 +40,12 @@ const LoginPage = () => {
     });
 
     if (responseNextAuth?.error) {
-      setErrors(responseNextAuth.error.split(","));
-      return;
+      toast({
+        title: 'Error',
+        description: 'Datos incorrectos',
+        variant: 'destructive'
+      })
+      return
     }
 
     router.push("/dashboard");
@@ -46,17 +60,17 @@ const LoginPage = () => {
       
       <form onSubmit={handleSubmit}>
       <CardContent>
+        <Label>Email</Label>
         <Input
           type="email"
-          placeholder="test@test.com"
           name="email"
           className="form-control mb-2"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
+        <Label>Contraseña:</Label>
         <Input
           type="password"
-          placeholder="123123"
           name="password"
           className="form-control mb-2"
           value={password}
@@ -68,15 +82,7 @@ const LoginPage = () => {
       </CardFooter>
       </form>
 
-      {errors.length > 0 && (
-        <div className="alert alert-danger mt-2">
-          <ul className="mb-0">
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <a href="/register" className="p-2 text-blue-500 underline">¿Aún no tienes cuenta?</a>
     </Card>
     </div>
   );
