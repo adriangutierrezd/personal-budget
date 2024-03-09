@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import moment from 'moment'
-import { getExpenses } from "@/lib/services/revenueService";
+import { getRevenues } from "@/lib/services/revenueService";
 import { getSession } from "next-auth/react";
 import { Expense } from "@/types/api";
 import { CurrencyEuroIcon } from "@heroicons/react/24/outline";
@@ -19,8 +19,7 @@ export default function IncomeCard(){
     })
 
     const fetchExpenses = async(data) => {
-        console.log(data)
-        const expenses = await getExpenses(data.user.token, startOfMonth, endOfMonth)
+        const expenses = await getRevenues(data.user.token, startOfMonth, endOfMonth)
         let income = 0
         expenses.data.forEach((e: Expense) => {
             console.log(e)
