@@ -18,6 +18,7 @@ export default function IncomeCard(){
         getSession().then(fetchExpenses)
     })
 
+    // @ts-ignore
     const fetchExpenses = async(data) => {
         const expenses = await getRevenues(data.user.token, startOfMonth, endOfMonth)
         let income = 0

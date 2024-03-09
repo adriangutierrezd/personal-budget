@@ -51,6 +51,7 @@ export default function NewCategoryDialog({userData, reload}: Props) {
   const {reset} = newCategoryForm
 
 
+  // @ts-ignore
   const onSubmit = async (values: z.infer<typeof categoryForm>) => {
 
     try{

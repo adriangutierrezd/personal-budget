@@ -48,6 +48,7 @@ export default function CategoriesTable({ data, userData, reload }: Props) {
 
   const { toast } = useToast()
 
+  // @ts-ignore
   const handleUpdateCategory = async ({
     categoryId,
     props
@@ -80,6 +81,7 @@ export default function CategoriesTable({ data, userData, reload }: Props) {
     }
   }
 
+  // @ts-ignore
   const handleDeleteCategory = async ({
     categoryId
   }: {

@@ -11,11 +11,10 @@ export const getCategories = async (token: string) => {
 
         const response = data.json()
         return response
-    }catch(error){
+    }catch(error: any){
         throw new Error(error.message)
     }
 }
-
 
 
 export const storeCategory = async({

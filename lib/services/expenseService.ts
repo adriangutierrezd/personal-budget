@@ -11,7 +11,7 @@ export const getExpenses = async (token: string, startDate: string, endDate: str
 
         const response = data.json()
         return response
-    }catch(error){
+    }catch(error: any){
         throw new Error(error.message)
     }
 }
@@ -102,7 +102,7 @@ export const getExpensesByCategory = async (token: string, startDate: string, en
 
         const response = data.json()
         return response
-    }catch(error){
+    }catch(error: any){
         throw new Error(error.message)
     }
 }
@@ -120,7 +120,7 @@ export const getExpensesByMonth = async (token: string, startDate: string, endDa
 
         const response = data.json()
         return response
-    }catch(error){
+    }catch(error: any){
         throw new Error(error.message)
     }
 }
