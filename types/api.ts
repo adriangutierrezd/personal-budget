@@ -12,6 +12,16 @@ export type Expense = {
     category?: Category
 }
 
+export type RecurringExpense = {
+    id: number;
+    userId: number;
+    categoryId: number;
+    name: string;
+    description: string | null;
+    amount: number;
+    category?: Category
+}
+
 export type Revenue = {
     id: number;
     userId: number;

@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, DocumentPlusIcon, DocumentMinusIcon, Bars3Icon, FolderOpenIcon, ChartBarIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, DocumentPlusIcon, DocumentMinusIcon, Bars3Icon, FolderOpenIcon, ChartBarIcon, XMarkIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
 const links = [
@@ -30,11 +30,11 @@ const links = [
     href: '/dashboard/statics', 
     icon: ChartBarIcon
   },
-  // {
-  //   name: 'Gastos recurrentes', 
-  //   href: '/dashboard/recurring', 
-  //   icon: ArrowPathIcon
-  // },
+  {
+    name: 'Gastos recurrentes', 
+    href: '/dashboard/recurring', 
+    icon: ArrowPathIcon
+  },
 ]
 
 export default function RootLayout({
