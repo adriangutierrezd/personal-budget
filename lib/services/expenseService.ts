@@ -109,7 +109,7 @@ export const getExpensesByCategory = async (token: string, startDate: string, en
 
 export const getExpensesByMonth = async (token: string, startDate: string, endDate: string) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses-by-month/?date[gte]=${startDate}&date[lte]=${endDate}&includeCategories=1`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses-by-month?date[gte]=${startDate}&date[lte]=${endDate}&includeCategories=1`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
