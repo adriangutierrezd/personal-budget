@@ -1,6 +1,6 @@
 export const getCategories = async (token: string) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories/`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -25,7 +25,7 @@ export const storeCategory = async({
     props: object
 }) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories/`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

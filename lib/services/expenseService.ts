@@ -1,6 +1,6 @@
 export const getExpenses = async (token: string, startDate: string, endDate: string) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses/?date[gte]=${startDate}&date[lte]=${endDate}&includeCategories=1`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses?date[gte]=${startDate}&date[lte]=${endDate}&includeCategories=1`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -50,7 +50,7 @@ export const storeExpense = async({
     props: object
 }) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses/`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -91,7 +91,7 @@ export const destroyExpense = async({
 
 export const getExpensesByCategory = async (token: string, startDate: string, endDate: string) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses-by-category/?date[gte]=${startDate}&date[lte]=${endDate}&includeCategories=1`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses-by-category?date[gte]=${startDate}&date[lte]=${endDate}&includeCategories=1`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

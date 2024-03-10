@@ -1,6 +1,6 @@
 export const getRevenues = async (token: string, startDate: string, endDate: string) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues/?date[gte]=${startDate}&date[lte]=${endDate}`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues?date[gte]=${startDate}&date[lte]=${endDate}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -25,7 +25,7 @@ export const storeRevenue = async({
     props: object
 }) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues/`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -93,7 +93,7 @@ export const updateRevenue = async({
 
 export const getRevenuesByMonth = async (token: string, startDate: string, endDate: string) => {
     try{
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues-by-month/?date[gte]=${startDate}&date[lte]=${endDate}`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/revenues-by-month?date[gte]=${startDate}&date[lte]=${endDate}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
