@@ -20,58 +20,59 @@ import NewExpenseDialog from "@/app/ui/expenses/new-expense-dialog";
 import ExpensesTable from "@/app/ui/expenses/expenses-table";
 import { getExpenses } from "@/lib/services/expenseService";
 import { getCategories } from "@/lib/services/categoriesService";
-export default function ExpensesPage(){
+import { TableSkeleton } from "@/app/ui/components/Skeletons";
+export default function ExpensesPage() {
 
-    const [userData, setUserData] = useState<Session|undefined>()
-    const [expenses, setExpenses] = useState<Array<Expense>>([])
-    const [categories, setCategories] = useState<Category[]>([])
+  const [userData, setUserData] = useState<Session | undefined>()
+  const [expenses, setExpenses] = useState<Array<Expense>>([])
+  const [categories, setCategories] = useState<Category[]>([])
 
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [date, setDate] = useState<DateRange | undefined>({
-      from: moment().startOf('month').toDate(),
-      to: moment().endOf('month').toDate(),
-    })
-  
-  
-    const fetchData = async () => {
-      setIsLoading(true)
-  
-      const data = await getSession()
-  
-      if (data && date) {
-        setUserData(data)
-
-        const [expensesData, categoriesData] = await Promise.all([
-          getExpenses(data.user.token, moment(date.from).format('YYYY-MM-DD'), moment(date.to).format('YYYY-MM-DD')),
-          getCategories(data.user.token)
-        ])
-  
-        setExpenses(expensesData.data.map((expense: Expense) => {
-          return {
-            ...expense,
-            amount: expense.amount.toLocaleString('es-ES'),
-            date: moment(expense.date).format('DD-MM-YYYY')
-          }
-        }))
-  
-        setCategories(categoriesData.data)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: moment().startOf('month').toDate(),
+    to: moment().endOf('month').toDate(),
+  })
 
 
-      }
-  
-      setIsLoading(false)
+  const fetchData = async () => {
+    setIsLoading(true)
+
+    const data = await getSession()
+
+    if (data && date) {
+      setUserData(data)
+
+      const [expensesData, categoriesData] = await Promise.all([
+        getExpenses(data.user.token, moment(date.from).format('YYYY-MM-DD'), moment(date.to).format('YYYY-MM-DD')),
+        getCategories(data.user.token)
+      ])
+
+      setExpenses(expensesData.data.map((expense: Expense) => {
+        return {
+          ...expense,
+          amount: expense.amount.toLocaleString('es-ES'),
+          date: moment(expense.date).format('DD-MM-YYYY')
+        }
+      }))
+
+      setCategories(categoriesData.data)
+
+
     }
-  
-  
-    useEffect(() => {
-      fetchData()
-    }, [])
 
-    return(
-        <main className="p-6 max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Gastos</h1>
-            <section className="flex items-center justify-end mb-4">
-        <NewExpenseDialog categories={categories} userData={userData} reload={fetchData}/>
+    setIsLoading(false)
+  }
+
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  return (
+    <main className="p-6 max-w-7xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Gastos</h1>
+      <section className="flex items-center justify-end mb-4">
+        <NewExpenseDialog categories={categories} userData={userData} reload={fetchData} />
       </section>
       <div className="flex items-center space-x-4 justify-end">
         <Popover>
@@ -118,7 +119,14 @@ export default function ExpensesPage(){
           <ArrowPathIcon onClick={fetchData} className="h-4 w-4" />
         </Button>
       </div>
-        <ExpensesTable categories={categories} userData={userData} reload={fetchData} data={expenses}/>
-        </main>
-    )
+
+      {isLoading ? (
+        <div className="mx-auto py-10">
+          <TableSkeleton columns={['Concepto', 'Fecha', 'Categoría', 'Cantidad', 'Acciones']} />
+        </div>
+      ) : (
+        <ExpensesTable categories={categories} userData={userData} reload={fetchData} data={expenses} />
+      )}
+    </main>
+  )
 }

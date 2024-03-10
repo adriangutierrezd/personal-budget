@@ -20,6 +20,7 @@ import { Revenue } from "@/types/api";
 import { getRevenues } from "@/lib/services/revenueService";
 import { Session } from "next-auth";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { TableSkeleton } from "@/app/ui/components/Skeletons";
 
 
 export default function IncomesPage() {
@@ -110,7 +111,14 @@ export default function IncomesPage() {
           <ArrowPathIcon onClick={fetchData} className="h-4 w-4" />
         </Button>
       </div>
-      <RevenuesTable userData={userData} data={revenues} reload={fetchData} />
+      {isLoading ? (
+        <div className="py-10">
+          <TableSkeleton columns={['Concepto', 'Fecha', 'Cantidad', 'Acciones']} />
+        </div>
+      ) : (
+        <RevenuesTable userData={userData} data={revenues} reload={fetchData} />
+      )}
+      
     </main>
   )
 }
