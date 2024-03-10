@@ -26,7 +26,7 @@ const RegisterPage = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sign-up/`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sign-up`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
