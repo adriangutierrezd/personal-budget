@@ -9,6 +9,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { categoryTypes } from "@/lib/constants"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -27,7 +35,10 @@ import { storeCategory } from "@/lib/services/categoriesService";
 
 const categoryForm = z.object({
   name: z.string().min(2).max(100),
-  color: z.string(),
+  type: z.string({
+    required_error: "Debes seleccionar una opción"
+  }),
+  color: z.string().min(6).max(10),
 })
 
 interface Props{
@@ -44,6 +55,7 @@ export default function NewCategoryDialog({userData, reload}: Props) {
     resolver: zodResolver(categoryForm),
     defaultValues: {
       name: '',
+      type: 'EXPENSES',
       color: '#000000'
     },
   })
@@ -96,6 +108,33 @@ export default function NewCategoryDialog({userData, reload}: Props) {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+<FormField
+                control={newCategoryForm.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Categoría *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una categoría" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categoryTypes.map((type) => {
+                          return (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.text}
+                            </SelectItem>
+                          )
+                        })}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

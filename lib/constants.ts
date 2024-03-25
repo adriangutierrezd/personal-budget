@@ -13,3 +13,13 @@ export const MONTHS = [
     'Diciembre'
   ]
   
+export const categoryTypes = [
+  {
+    value: 'EXPENSES',
+    text: 'Gastos'
+  },
+  {
+    value: 'EQUITY',
+    text: 'Patrimonio'
+  },
+]
