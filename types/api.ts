@@ -66,3 +66,17 @@ export type EquityPerDate = {
     yearMonth: string;
     totalEquity: number;
 }
+
+export type EquityStatement = {
+    id: number;
+    userId: number;
+    type: "ASSET" | "LIABILITY";
+    categoryId: number;
+    name: string;
+    description: string|null;
+    date: string;
+    week: number;
+    month: number;
+    year: number;
+    amount: number;
+}
