@@ -1,8 +1,7 @@
-import { EquityStatement } from "@/types/api";
+import { Category, EquityStatement } from "@/types/api";
 import { Session } from "next-auth";
 import { DataTable } from "../components/datatable";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { useToast } from "@/components/ui/use-toast"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,69 +14,17 @@ import {
 } from "@/components/ui/alert-dialog"
 import { PencilIcon } from "lucide-react";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import EquityStatementDialog from "./equity-statement-dialog";
 
 interface Props {
   readonly data: EquityStatement[];
   readonly userData: Session | undefined;
+  readonly handleDelete: (id: number) => void;
+  readonly date: Date;
+  readonly categories: Category[];
 }
 
-export default function EquityStatementLineTable({ data, userData}: Props) {
-
-
-  const { toast } = useToast()
-
-  // @ts-ignore
-  const handleUpdate = async ({
-    date
-  }: {
-    date: string
-  }) => {
-    try {
-
-      if (!userData) throw new Error('Ha ocurrido un error de autenticación');
-
-    //
-
-      toast({
-        title: "Correcto",
-        description: "Categoría actualizada con éxito",
-      })
-
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Ha ocurrido un error",
-        description: error.message,
-      })
-    }
-  }
-
-  // @ts-ignore
-  const handleDelete = async ({
-    date
-  }: {
-    date: string
-  }) => {
-    try {
-
-      if (!userData) throw new Error('Ha ocurrido un error de autenticación');
-
-        //
-
-      toast({
-        title: "Correcto",
-        description: "Categoría eliminada con éxito",
-      })
-
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Ha ocurrido un error",
-        description: error.message,
-      })
-    }
-  }
-
+export default function EquityStatementLineTable({ data, date, categories, userData, handleDelete }: Props) {
 
   const columns: ColumnDef<EquityStatement>[] = [
     {
@@ -95,7 +42,7 @@ export default function EquityStatementLineTable({ data, userData}: Props) {
     {
       header: "Acciones",
       accessorKey: "actions",
-      cell: ({ row }) => <p>TODO</p>
+      cell: ({ row }) => <EquityStatementActions categories={categories} date={date} row={row} userData={userData} handleDelete={handleDelete}  />
     }
   ]
 
@@ -107,26 +54,27 @@ export default function EquityStatementLineTable({ data, userData}: Props) {
   )
 }
 
-
 interface EquityStatementActionsProps {
     readonly row: Row<any>
-    readonly handleDelete: ({
-      date
-    }: {
-      date: string
-    }) => void,
-    readonly handleUpdate: ({
-      date
-    }: {
-        date: string
-    }) => void
+    readonly handleDelete: (id: number) => void;
+    readonly date: Date;
+    readonly userData: Session | undefined;
+    readonly categories: Category[];
   }
   
-  const EquityStatementActions = ({ row, handleUpdate, handleDelete }: EquityStatementActionsProps) => {
+  const EquityStatementActions = ({ row, handleDelete, categories, userData, date}: EquityStatementActionsProps) => {
+
+    const defValues = {
+      name: row.original.name ?? undefined,
+      description: row.original.description ?? undefined,
+      categoryId: row.original.categoryId ?? undefined,
+      amount: row.original.amount ?? undefined,
+      type: row.original.type ?? undefined,
+    }
   
     return (
       <div className="flex space-x-4">
-        <PencilIcon onClick={() => handleUpdate(row.original.date)} className="cursor-pointer h-4 w-4 text-blue-500" />
+        <EquityStatementDialog id={row.original.id} categories={categories} defaultValues={defValues} userData={userData} date={date} trigger={<PencilIcon className="cursor-pointer h-4 w-4 text-blue-500" />} />
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <TrashIcon className="cursor-pointer h-4 w-4 text-red-500" />
@@ -136,11 +84,11 @@ interface EquityStatementActionsProps {
               <AlertDialogTitle>Eliminar registro de patrimonio</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogContent>
-              ¿Quieres continuar? Esta acción no se puede deshacer. Se eliminarán todos los registros de esta fecha
+              ¿Quieres continuar? Esta acción no se puede deshacer.
             </AlertDialogContent>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleDelete({ date: row.original.date })}>Continuar</AlertDialogAction>
+              <AlertDialogAction onClick={() => handleDelete(row.original.id)}>Continuar</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
