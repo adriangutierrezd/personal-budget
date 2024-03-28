@@ -81,4 +81,5 @@ export type EquityStatement = {
     month: number;
     year: number;
     amount: number;
+    category: Category;
 }
