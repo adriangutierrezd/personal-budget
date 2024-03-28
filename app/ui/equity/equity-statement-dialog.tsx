@@ -1,6 +1,6 @@
 "use client"
-import { Category } from "@/types/api";
-import { useState } from "react";
+import { Category, EquityStatement } from "@/types/api";
+import React, { useState } from "react";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -8,7 +8,6 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input";
 import {
@@ -45,9 +44,10 @@ interface Props {
     readonly userData: Session | undefined;
     readonly date: Date;
     readonly id: number | null;
+    readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement?: EquityStatement) => void
 }
 
-export default function EquityStatementDialog({defaultValues, trigger, categories, date, userData, id = null}: Props){
+export default function EquityStatementDialog({defaultValues, trigger, categories, date, handleStatementsChange, userData, id = null}: Props){
 
     const [open, setOpen] = useState<boolean>(false)
 
@@ -73,7 +73,7 @@ export default function EquityStatementDialog({defaultValues, trigger, categorie
                         ...data.data,
                         category: categories.find((category: Category) => category.id === Number(data.data.categoryId))
                     }
-                    setEquityStatements([...equityStatements, newStatement])
+                    handleStatementsChange('ADD', newStatement)
                     setOpen(false)
                 }
             }else{
@@ -86,13 +86,21 @@ export default function EquityStatementDialog({defaultValues, trigger, categorie
                         date: moment(date).format('YYYY-MM-DD')
                     }
                 })
-                console.log(response)    
+                if(response.status === 200){
+                    const data = await response.json()
+                    const newStatement = {
+                        ...data.data,
+                        category: categories.find((category: Category) => category.id === Number(data.data.categoryId))
+                    }
+                    handleStatementsChange('UPDATE', newStatement)
+                    setOpen(false)
+                }  
             }
 
         }catch(error){
             toast({
                 title: 'Error',
-                description: error.message,
+                description: error instanceof Error ? error.message : 'Ha ocurrido un error inesperado',
                 variant: 'destructive'
             })
         }
@@ -103,13 +111,11 @@ export default function EquityStatementDialog({defaultValues, trigger, categorie
         defaultValues,
     })
 
+    const { reset } = form
+
     return (
-        <AlertDialog open={open}>
-        <AlertDialogTrigger asChild>
-            <Button type="button" onClick={() => setOpen(true)}>
-                Añadir registro
-            </Button>
-        </AlertDialogTrigger>
+        <AlertDialog open={open} onOpenChange={() => { reset({}) }}>
+        {React.cloneElement(trigger, { onClick: () => setOpen(true) })}
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>Detalles del registro</AlertDialogTitle>

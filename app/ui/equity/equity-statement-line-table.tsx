@@ -22,9 +22,11 @@ interface Props {
   readonly handleDelete: (id: number) => void;
   readonly date: Date;
   readonly categories: Category[];
+  readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement?: EquityStatement) => void
+
 }
 
-export default function EquityStatementLineTable({ data, date, categories, userData, handleDelete }: Props) {
+export default function EquityStatementLineTable({ data, date, categories, handleStatementsChange, userData, handleDelete }: Props) {
 
   const columns: ColumnDef<EquityStatement>[] = [
     {
@@ -42,7 +44,7 @@ export default function EquityStatementLineTable({ data, date, categories, userD
     {
       header: "Acciones",
       accessorKey: "actions",
-      cell: ({ row }) => <EquityStatementActions categories={categories} date={date} row={row} userData={userData} handleDelete={handleDelete}  />
+      cell: ({ row }) => <EquityStatementActions categories={categories} handleStatementsChange={handleStatementsChange} date={date} row={row} userData={userData} handleDelete={handleDelete}  />
     }
   ]
 
@@ -60,9 +62,10 @@ interface EquityStatementActionsProps {
     readonly date: Date;
     readonly userData: Session | undefined;
     readonly categories: Category[];
+    readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement?: EquityStatement) => void
   }
   
-  const EquityStatementActions = ({ row, handleDelete, categories, userData, date}: EquityStatementActionsProps) => {
+  const EquityStatementActions = ({ row, handleDelete, categories, userData, date, handleStatementsChange}: EquityStatementActionsProps) => {
 
     const defValues = {
       name: row.original.name ?? undefined,
@@ -74,7 +77,7 @@ interface EquityStatementActionsProps {
   
     return (
       <div className="flex space-x-4">
-        <EquityStatementDialog id={row.original.id} categories={categories} defaultValues={defValues} userData={userData} date={date} trigger={<PencilIcon className="cursor-pointer h-4 w-4 text-blue-500" />} />
+        <EquityStatementDialog handleStatementsChange={handleStatementsChange} id={row.original.id} categories={categories} defaultValues={defValues} userData={userData} date={date} trigger={<PencilIcon className="cursor-pointer h-4 w-4 text-blue-500" />} />
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <TrashIcon className="cursor-pointer h-4 w-4 text-red-500" />

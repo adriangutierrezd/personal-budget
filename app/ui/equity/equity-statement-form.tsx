@@ -4,7 +4,6 @@ import { format } from "date-fns"
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
-import { z } from "zod"
 import {
     Popover,
     PopoverContent,
@@ -15,21 +14,19 @@ import { Session } from "next-auth";
 import { ArrowUturnLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { Category, EquityStatement } from "@/types/api";
 import { useEffect, useState } from "react";
-import { destroyEquityStatement, getEquityStatements, storeEquityStatement, updateEquityStatement } from "@/lib/services/equityService";
+import { destroyEquityStatement, getEquityStatements } from "@/lib/services/equityService";
 import EquityStatementLineTable from "./equity-statement-line-table";
 import moment from "moment";
 import { toast } from "@/components/ui/use-toast";
-import { equityStatementForm } from "@/lib/constants";
 import { getCategories } from "@/lib/services/categoriesService";
 import EquityStatementDialog from "./equity-statement-dialog";
 
 interface Props {
     readonly userData: Session | undefined;
-    readonly reload: () => void;
     readonly handleBackToTable: () => void;
 }
 
-export default function EquityStatementForm({ userData, reload, handleBackToTable }: Props) {
+export default function EquityStatementForm({ userData, handleBackToTable }: Props) {
 
     const [equityStatements, setEquityStatements] = useState<Array<EquityStatement>>([])
     const [assetStatements, setAssetStatements] = useState<Array<EquityStatement>>([])
@@ -37,7 +34,6 @@ export default function EquityStatementForm({ userData, reload, handleBackToTabl
     const [categories, setCategories] = useState<Category[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [date, setDate] = React.useState<Date>(new Date())
-
 
     const fetchData = async () => {
         try {
@@ -59,45 +55,22 @@ export default function EquityStatementForm({ userData, reload, handleBackToTabl
         }
     }
 
-    const onSubmit = async (values: z.infer<typeof equityStatementForm>, id?: number) => {
-        try{
+    const handleDelete = async (id: number) => {
+        try {
 
             const token = userData?.user.token
-            if(!token) throw new Error('Ha ocurrido un error de autenticación')
+            if (!token) throw new Error('Ha ocurrido un error de autenticación')
 
-            if(!id){
-                const response = await storeEquityStatement({
-                    token,
-                    props: {
-                        ...values,
-                        description: values.description ?? null,
-                        date: moment(date).format('YYYY-MM-DD')
-                    }
-                })
-    
-                if(response.status === 201){
-                    const data = await response.json()
-                    const newStatement = {
-                        ...data.data,
-                        category: categories.find((category: Category) => category.id === Number(data.data.categoryId))
-                    }
-                    setEquityStatements([...equityStatements, newStatement])
-                    setOpen(false)
-                }
-            }else{
-                const response = await updateEquityStatement({
-                    token,
-                    statementId: id,
-                    props: {
-                        ...values,
-                        description: values.description ?? null,
-                        date: moment(date).format('YYYY-MM-DD')
-                    }
-                })
-                console.log(response)    
+            const response = await destroyEquityStatement({
+                token,
+                statementId: id
+            })
+
+            if(response.status === 200){
+                setEquityStatements(equityStatements.filter((statement: EquityStatement) => statement.id != id))
             }
 
-        }catch(error){
+        } catch (error) {
             toast({
                 title: 'Error',
                 description: error.message,
@@ -106,22 +79,18 @@ export default function EquityStatementForm({ userData, reload, handleBackToTabl
         }
     }
 
-    const handleDelete = async (id: number) => {
-        try{
-
-            const token = userData?.user.token
-            if(!token) throw new Error('Ha ocurrido un error de autenticación')
-
-            await destroyEquityStatement({
-                token,
-                statementId: id
-            })
-        }catch(error){
-            toast({
-                title: 'Error',
-                description: error.message,
-                variant: 'destructive'
-            })
+    const handleStatementsChange = (action: "ADD" | "UPDATE", statement: EquityStatement) => {
+        if(action === 'ADD'){
+            setEquityStatements([...equityStatements, statement])
+        }else if(action === 'UPDATE'){
+            const updatedStatements = equityStatements.map((item) => {
+                if (item.id == statement.id) {
+                    return statement;
+                } else {
+                    return item;
+                }
+            });
+            setEquityStatements(updatedStatements);
         }
     }
 
@@ -165,13 +134,15 @@ export default function EquityStatementForm({ userData, reload, handleBackToTabl
                 </Button>
             </div>
             <div className="flex items-center justify-end mb-3">
-                <EquityStatementDialog id={null} categories={categories} defaultValues={{}} userData={userData} date={date} trigger={<></>} />
+                <EquityStatementDialog handleStatementsChange={handleStatementsChange} id={null} categories={categories} defaultValues={{}} userData={userData} date={date} trigger={<Button type="button">
+                    Añadir registro
+                </Button>} />
             </div>
             <h2 className="font-semibold">Activos</h2>
-            {isLoading ? (<p>...</p>) : (<EquityStatementLineTable date={date} categories={categories} handleDelete={handleDelete} data={assetStatements} userData={userData} />)}
+            {isLoading ? (<p>...</p>) : (<EquityStatementLineTable handleStatementsChange={handleStatementsChange} date={date} categories={categories} handleDelete={handleDelete} data={assetStatements} userData={userData} />)}
 
             <h2 className="font-semibold">Pasivos</h2>
-            {isLoading ? (<p>...</p>) : (<EquityStatementLineTable date={date} categories={categories} handleDelete={handleDelete} data={liabilityStatements} userData={userData} />)}
+            {isLoading ? (<p>...</p>) : (<EquityStatementLineTable handleStatementsChange={handleStatementsChange} date={date} categories={categories} handleDelete={handleDelete} data={liabilityStatements} userData={userData} />)}
 
         </>
     )
