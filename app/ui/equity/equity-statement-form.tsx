@@ -20,6 +20,7 @@ import moment from "moment";
 import { toast } from "@/components/ui/use-toast";
 import { getCategories } from "@/lib/services/categoriesService";
 import EquityStatementDialog from "./equity-statement-dialog";
+import { EquityStatementDoughnut } from "./equity-statement-doughnut";
 
 interface Props {
     readonly userData: Session | undefined;
@@ -31,6 +32,7 @@ interface Props {
 export default function EquityStatementForm({ userData, handleBackToTable, reload, selectedDate = new Date() }: Props) {
 
     const [equityStatements, setEquityStatements] = useState<Array<EquityStatement>>([])
+    const [totalValue, setTotalValue] = useState<number>(0)
     const [assetStatements, setAssetStatements] = useState<Array<EquityStatement>>([])
     const [liabilityStatements, setLiabilityStatements] = useState<Array<EquityStatement>>([])
     const [categories, setCategories] = useState<Category[]>([])
@@ -68,7 +70,7 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
                 statementId: id
             })
 
-            if(response.status === 200){
+            if (response.status === 200) {
                 setEquityStatements(equityStatements.filter((statement: EquityStatement) => statement.id != id))
             }
 
@@ -82,9 +84,9 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
     }
 
     const handleStatementsChange = (action: "ADD" | "UPDATE", statement: EquityStatement) => {
-        if(action === 'ADD'){
+        if (action === 'ADD') {
             setEquityStatements([...equityStatements, statement])
-        }else if(action === 'UPDATE'){
+        } else if (action === 'UPDATE') {
             const updatedStatements = equityStatements.map((item) => {
                 if (item.id == statement.id) {
                     return statement;
@@ -105,6 +107,15 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
     useEffect(() => {
         setAssetStatements(equityStatements.filter((d: EquityStatement) => d.type === 'ASSET'))
         setLiabilityStatements(equityStatements.filter((d: EquityStatement) => d.type === 'LIABILITY'))
+        let newTotal = 0
+        equityStatements.forEach((statement: EquityStatement) => {
+            if (statement.type === 'ASSET') {
+                newTotal += Number(statement.amount)
+            } else {
+                newTotal -= Number(statement.amount)
+            }
+        })
+        setTotalValue(newTotal)
     }, [equityStatements])
 
     return (
@@ -137,7 +148,8 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
                     <ArrowUturnLeftIcon className="w-4 h-4" />
                 </Button>
             </div>
-            <div className="flex items-center justify-end mb-3">
+            <div className="flex items-center justify-between mb-3">
+                <p>Valor total: {totalValue.toLocaleString('es-ES')} €</p>
                 <EquityStatementDialog handleStatementsChange={handleStatementsChange} id={null} categories={categories} defaultValues={{}} userData={userData} date={date} trigger={<Button type="button">
                     Añadir registro
                 </Button>} />
@@ -148,6 +160,28 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
             <h2 className="font-semibold">Pasivos</h2>
             {isLoading ? (<p>...</p>) : (<EquityStatementLineTable handleStatementsChange={handleStatementsChange} date={date} categories={categories} handleDelete={handleDelete} data={liabilityStatements} userData={userData} />)}
 
+
+            <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2 md:col-span-1">
+                    <h2 className="font-semibold">
+                        Distribución de activos
+                    </h2>
+                    <div>
+                        <EquityStatementDoughnut rawData={assetStatements} />
+                    </div>
+                </div>
+
+
+                <div className="col-span-2 md:col-span-1">
+                    <h2 className="font-semibold">
+                        Distribución de pasivos
+                    </h2>
+                    <div>
+                        <EquityStatementDoughnut rawData={liabilityStatements} />
+                    </div>
+                </div>
+
+            </div>
         </>
     )
 

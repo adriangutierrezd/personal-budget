@@ -1,4 +1,4 @@
-export const getEquityPerDate = async (token: string) => {
+export const getAllEquityPerDate = async (token: string) => {
     try{
         const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/equity-per-date`, {
             method: 'GET',
@@ -15,6 +15,25 @@ export const getEquityPerDate = async (token: string) => {
         throw new Error(error.message)
     }
 }
+
+export const getEquityPerDate = async (token: string,  startDate: string, endDate: string) => {
+    try{
+        const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/equity-per-date?date[gte]=${startDate}&date[lte]=${endDate}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+
+        const response = data.json()
+        return response
+    }catch(error: any){
+        throw new Error(error.message)
+    }
+}
+
 
 export const getEquityStatements = async (token: string, date: string) => {
     try{

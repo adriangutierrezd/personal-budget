@@ -5,7 +5,7 @@ import { Session } from "next-auth";
 import { Button } from "@/components/ui/button";
 import { getSession } from "next-auth/react";
 import { EquityPerDate } from "@/types/api";
-import { getEquityPerDate } from "@/lib/services/equityService";
+import { getAllEquityPerDate } from "@/lib/services/equityService";
 import { toast } from "@/components/ui/use-toast";
 import { TableSkeleton } from "@/app/ui/components/Skeletons";
 import EquityStatementsTable from "@/app/ui/equity/equity-statements-table";
@@ -26,7 +26,7 @@ export default function EquityPage() {
             const data = await getSession()
             if (data) {
                 setUserData(data)
-                const equityData = await getEquityPerDate(data.user.token)
+                const equityData = await getAllEquityPerDate(data.user.token)
                 setEquityPerDate(equityData.data.map((e: EquityPerDate) => {
                     return {
                         ...e,
@@ -68,7 +68,7 @@ export default function EquityPage() {
                     <>
                         <section className="flex items-center justify-end mb-4">
                             <Button variant="outline" onClick={() => setDisplayForm(true)}>
-                                Añadir registro
+                                Añadir patrimonio
                             </Button>
                         </section>
 

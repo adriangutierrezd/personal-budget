@@ -65,6 +65,8 @@ export type EquityPerDate = {
     year: number;
     yearMonth: string;
     totalEquity: number;
+    totalAssets: number;
+    totalLiabilities: number;
 }
 
 export type EquityStatement = {

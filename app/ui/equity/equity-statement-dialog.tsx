@@ -51,6 +51,13 @@ export default function EquityStatementDialog({defaultValues, trigger, categorie
 
     const [open, setOpen] = useState<boolean>(false)
 
+    const form = useForm<z.infer<typeof equityStatementForm>>({
+        resolver: zodResolver(equityStatementForm),
+        defaultValues,
+    })
+
+    const { reset } = form
+
     const onSubmit = async (values: z.infer<typeof equityStatementForm>, id: number|null) => {
         try{
 
@@ -97,6 +104,8 @@ export default function EquityStatementDialog({defaultValues, trigger, categorie
                 }  
             }
 
+            reset({})
+
         }catch(error){
             toast({
                 title: 'Error',
@@ -105,13 +114,6 @@ export default function EquityStatementDialog({defaultValues, trigger, categorie
             })
         }
     }
-
-    const form = useForm<z.infer<typeof equityStatementForm>>({
-        resolver: zodResolver(equityStatementForm),
-        defaultValues,
-    })
-
-    const { reset } = form
 
     return (
         <AlertDialog open={open} onOpenChange={() => { reset({}) }}>

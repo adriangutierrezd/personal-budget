@@ -20,7 +20,9 @@ import RevenuesExpensesByMonth from "@/app/ui/statics/revenues-expenses-by-month
 import { getRevenuesByMonth } from "@/lib/services/revenueService"
 import { MONTHS } from "@/lib/constants"
 import RevenuesExpensesByMonthTable from "@/app/ui/statics/revenues-expenses-by-month-table"
-import { MonthData, MonthRawData } from "@/types/api"
+import { EquityPerDate, MonthData, MonthRawData } from "@/types/api"
+import { EquityProgessionChart } from "@/app/ui/equity/equity-progression-chart"
+import { getEquityPerDate } from "@/lib/services/equityService"
 
 export default function StaticsPage() {
 
@@ -34,6 +36,7 @@ export default function StaticsPage() {
   const [revenuesByMonth, setRevenuesByMonth] = useState<Array<any>>([])
   const [expensesByCategory, setExpensesByCategory] = useState<Array<any>>([])
   const [revExpData, setRevExpData] = useState<Array<MonthData>>([])
+  const [equityPerDate, setEquityPerDate] = useState<Array<EquityPerDate>>([])
   const [date, setDate] = useState<DateRange | undefined>({
     from: startDate.toDate(),
     to: endDate.toDate(),
@@ -49,16 +52,18 @@ export default function StaticsPage() {
       const fromDate = moment(date.from).format('YYYY-MM-DD')
       const toDate = moment(date.to).format('YYYY-MM-DD')
 
-      const [expenseByCategoryData, expByMonth, revByMonth] = await Promise.all([
+      const [expenseByCategoryData, expByMonth, revByMonth, equityData] = await Promise.all([
         getExpensesByCategory(data.user.token, fromDate, toDate),
         getExpensesByMonth(data.user.token, fromDate, toDate),
-        getRevenuesByMonth(data.user.token, fromDate, toDate)
+        getRevenuesByMonth(data.user.token, fromDate, toDate),
+        getEquityPerDate(data.user.token, fromDate, toDate)
       ])
 
+      setEquityPerDate(equityData.data)
       setExpensesByCategory(expenseByCategoryData.data)
       setRevenuesByMonth(revByMonth.data)
       setExpensesByMonth(expByMonth.data)
-      
+
       const revExp: MonthData[] = []
       revByMonth.data.forEach((rev: MonthRawData, index: number) => {
         revExp[index] = {
@@ -74,17 +79,19 @@ export default function StaticsPage() {
       expByMonth.data.forEach((exp: MonthRawData, index: number) => {
         revExp[index] = {
           ...revExp[index],
+          monthName: MONTHS[exp.month - 1],
+          year: exp.year,
           spentAmount: exp.total,
-          totalSaved: Number(revExp[index].earnedAmount) - exp.total,
-          savedPercentage: ((Number(revExp[index].earnedAmount)- exp.total)/Number(revExp[index].earnedAmount)*100).toFixed(2)
+          totalSaved: Number(revExp[index]?.earnedAmount ?? 0) - exp.total,
+          savedPercentage: ((Number(revExp[index]?.earnedAmount ?? 0) - exp.total) / Number(revExp[index]?.earnedAmount ?? 0) * 100).toFixed(2)
         }
       })
 
       setRevExpData(revExp.map((r: any) => {
         return {
           ...r,
-          earnedAmount: r.earnedAmount.toLocaleString('es-ES'),
-          spentAmount: r.spentAmount.toLocaleString('es-ES'),
+          earnedAmount: r.earnedAmount ? r.earnedAmount.toLocaleString('es-ES') : 0,
+          spentAmount: r.spentAmount ? r.spentAmount.toLocaleString('es-ES') : 0,
           savedPercentage: r.savedPercentage.toLocaleString('es-ES'),
           totalSaved: r.totalSaved.toLocaleString('es-ES'),
         }
@@ -144,7 +151,7 @@ export default function StaticsPage() {
             />
           </PopoverContent>
         </Popover>
-        <Button>
+        <Button onClick={fetchData}>
           <ArrowPathIcon className="h-4 w-4" />
         </Button>
       </div>
@@ -153,6 +160,8 @@ export default function StaticsPage() {
       <RevenuesExpensesByMonthTable data={revExpData} />
       <h2 className="font-semibold my-3">Gastos totales por categoría</h2>
       <ExpensesByCategory expensesByCategory={expensesByCategory} />
+      <h2 className="font-semibold my-3">Progresión de patrimonio</h2>
+      <EquityProgessionChart rawData={equityPerDate} />
     </main>
   )
 }

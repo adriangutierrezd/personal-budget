@@ -1,3 +1,4 @@
+import { EquityStatement } from "@/types/api";
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -23,4 +24,17 @@ export function hexToRgba(hex: string, alpha: number) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-
+export const groupEquityStatementsByCategory = (registros: EquityStatement[])  => {
+  return registros.reduce((resultado: any, registro: EquityStatement) => {
+      const { amount, category } = registro;
+      const { name, color } = category;
+      
+      if (!resultado[name]) {
+          resultado[name] = { categoryName: name, totalAmount: 0, backgorundColor: hexToRgba(color, 0.2), borderColor: hexToRgba(color, 1) };
+      }
+      
+      resultado[name].totalAmount += Number(amount);
+      
+      return resultado;
+  }, {});
+}
