@@ -37,7 +37,7 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
     const [liabilityStatements, setLiabilityStatements] = useState<Array<EquityStatement>>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [date, setDate] = React.useState<Date>(selectedDate)
+    const [date, setDate] = useState<Date>(selectedDate)
 
     const fetchData = async () => {
         try {
@@ -139,7 +139,9 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
                             locale={es}
                             mode="single"
                             selected={date}
-                            onSelect={setDate}
+                            onSelect={(value) => {
+                                setDate(value ?? new Date())
+                            }}
                             initialFocus
                         />
                     </PopoverContent>
