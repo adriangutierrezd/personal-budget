@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, DocumentPlusIcon, DocumentMinusIcon, Bars3Icon, FolderOpenIcon, ChartBarIcon, XMarkIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, DocumentPlusIcon, DocumentMinusIcon, Bars3Icon, FolderOpenIcon, ChartBarIcon, XMarkIcon, ArrowPathIcon, CircleStackIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
 const links = [
@@ -19,6 +19,11 @@ const links = [
     name: 'Gastos', 
     href: '/dashboard/expenses', 
     icon: DocumentMinusIcon
+  },
+  {
+    name: 'Patrimonio', 
+    href: '/dashboard/equity', 
+    icon: CircleStackIcon
   },
   {
     name: 'Categorías', 

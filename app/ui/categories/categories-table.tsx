@@ -30,6 +30,14 @@ import { Input } from "@/components/ui/input"
 import { destroyCategory, updateCategory } from "@/lib/services/categoriesService";
 import { PencilIcon } from "lucide-react";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { categoryTypes } from "@/lib/constants"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Props {
   readonly data: Category[];
@@ -41,6 +49,9 @@ interface Props {
 const categoryForm = z.object({
   name: z.string().min(2).max(100),
   color: z.string().min(6).max(10),
+  type: z.string({
+    required_error: "Debes seleccionar una opción"
+  }),
 })
 
 export default function CategoriesTable({ data, userData, reload }: Props) {
@@ -118,6 +129,11 @@ export default function CategoriesTable({ data, userData, reload }: Props) {
       header: "Nombre",
     },
     {
+      accessorKey: "type",
+      header: "Tipo",
+      cell: ({row}) => categoryTypes.find((type) => type.value === row.original.type)?.text
+    },
+    {
       accessorKey: "color",
       header: "Color",
       cell: ({row}) => <div className="rounded-full h-6 w-6" style={{
@@ -164,7 +180,8 @@ const CategoriesTableActions = ({ row, handleUpdateCategory, handleDeleteCategor
     resolver: zodResolver(categoryForm),
     defaultValues: {
       name: row.original.name,
-      color: row.original.color
+      color: row.original.color,
+      type: row.original.type
     },
   })
 
@@ -197,6 +214,33 @@ const CategoriesTableActions = ({ row, handleUpdateCategory, handleDeleteCategor
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={updateCategoryForm.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Categoría *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una categoría" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categoryTypes.map((type) => {
+                          return (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.text}
+                            </SelectItem>
+                          )
+                        })}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

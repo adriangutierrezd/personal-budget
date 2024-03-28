@@ -55,7 +55,7 @@ export default function ExpensesPage() {
         }
       }))
 
-      setCategories(categoriesData.data)
+      setCategories(categoriesData.data.filter((category: Category) => category.type === 'EXPENSES'))
 
 
     }
