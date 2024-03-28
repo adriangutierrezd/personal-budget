@@ -24,16 +24,18 @@ import EquityStatementDialog from "./equity-statement-dialog";
 interface Props {
     readonly userData: Session | undefined;
     readonly handleBackToTable: () => void;
+    readonly reload: () => void;
+    readonly selectedDate: Date;
 }
 
-export default function EquityStatementForm({ userData, handleBackToTable }: Props) {
+export default function EquityStatementForm({ userData, handleBackToTable, reload, selectedDate = new Date() }: Props) {
 
     const [equityStatements, setEquityStatements] = useState<Array<EquityStatement>>([])
     const [assetStatements, setAssetStatements] = useState<Array<EquityStatement>>([])
     const [liabilityStatements, setLiabilityStatements] = useState<Array<EquityStatement>>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [date, setDate] = React.useState<Date>(new Date())
+    const [date, setDate] = React.useState<Date>(selectedDate)
 
     const fetchData = async () => {
         try {
@@ -73,7 +75,7 @@ export default function EquityStatementForm({ userData, handleBackToTable }: Pro
         } catch (error) {
             toast({
                 title: 'Error',
-                description: error.message,
+                description: error instanceof Error ? error.message : 'Ha ocurrido un error inesperado',
                 variant: 'destructive'
             })
         }
@@ -92,6 +94,8 @@ export default function EquityStatementForm({ userData, handleBackToTable }: Pro
             });
             setEquityStatements(updatedStatements);
         }
+
+        reload()
     }
 
     useEffect(() => {

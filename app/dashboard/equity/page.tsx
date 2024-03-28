@@ -17,6 +17,7 @@ export default function EquityPage() {
     const [displayForm, setDisplayForm] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [equityPerDate, setEquityPerDate] = useState<Array<EquityPerDate>>([])
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date())
 
 
     const fetchData = async () => {
@@ -54,10 +55,15 @@ export default function EquityPage() {
         setDisplayForm(false)
     }
 
+    const handleDisplayForm = (date: Date) => {
+        setSelectedDate(date)
+        setDisplayForm(true)
+    }
+
     return (
         <main className="p-6 max-w-7xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">Patrimonio</h1>
-            {displayForm ? (<EquityStatementForm userData={userData} handleBackToTable={handleBackToTable} reload={fetchData} />) :
+            {displayForm ? (<EquityStatementForm selectedDate={selectedDate} userData={userData} handleBackToTable={handleBackToTable} reload={fetchData} />) :
                 (
                     <>
                         <section className="flex items-center justify-end mb-4">
@@ -71,7 +77,7 @@ export default function EquityPage() {
                                 <TableSkeleton columns={['Fecha', 'Patrimonio', 'Acciones']} />
                             </div>
                         ) : (
-                            <EquityStatementsTable data={equityPerDate} userData={userData} reload={fetchData} />
+                            <EquityStatementsTable handleDisplayForm={handleDisplayForm} data={equityPerDate} userData={userData} reload={fetchData} />
                         )}
                     </>
 

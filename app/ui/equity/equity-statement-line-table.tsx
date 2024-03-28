@@ -22,7 +22,7 @@ interface Props {
   readonly handleDelete: (id: number) => void;
   readonly date: Date;
   readonly categories: Category[];
-  readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement?: EquityStatement) => void
+  readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement: EquityStatement) => void
 
 }
 
@@ -62,7 +62,7 @@ interface EquityStatementActionsProps {
     readonly date: Date;
     readonly userData: Session | undefined;
     readonly categories: Category[];
-    readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement?: EquityStatement) => void
+    readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement: EquityStatement) => void
   }
   
   const EquityStatementActions = ({ row, handleDelete, categories, userData, date, handleStatementsChange}: EquityStatementActionsProps) => {
@@ -70,7 +70,7 @@ interface EquityStatementActionsProps {
     const defValues = {
       name: row.original.name ?? undefined,
       description: row.original.description ?? undefined,
-      categoryId: row.original.categoryId ?? undefined,
+      categoryId: row.original.categoryId ? row.original.categoryId.toString() : undefined,
       amount: row.original.amount ?? undefined,
       type: row.original.type ?? undefined,
     }

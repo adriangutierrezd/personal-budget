@@ -44,7 +44,7 @@ interface Props {
     readonly userData: Session | undefined;
     readonly date: Date;
     readonly id: number | null;
-    readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement?: EquityStatement) => void
+    readonly handleStatementsChange: (action: "ADD" | "UPDATE", statement: EquityStatement) => void
 }
 
 export default function EquityStatementDialog({defaultValues, trigger, categories, date, handleStatementsChange, userData, id = null}: Props){

@@ -1,4 +1,4 @@
-import { EquityPerDate } from "@/types/api";
+import { EquityPerDate, EquityStatement } from "@/types/api";
 import { Session } from "next-auth";
 import { DataTable } from "../components/datatable";
 import { ColumnDef, Row } from "@tanstack/react-table";
@@ -15,44 +15,21 @@ import {
 } from "@/components/ui/alert-dialog"
 import { PencilIcon } from "lucide-react";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import moment from "moment";
+import { destroyEquityStatement, getEquityStatements } from "@/lib/services/equityService";
 
 interface Props {
   readonly data: EquityPerDate[];
   readonly userData: Session | undefined;
   readonly reload: () => void
+  readonly handleDisplayForm: (date: Date) => void
 }
 
-export default function EquityStatementsTable({ data, userData, reload }: Props) {
+export default function EquityStatementsTable({ data, userData, reload, handleDisplayForm }: Props) {
 
 
   const { toast } = useToast()
 
-  // @ts-ignore
-  const handleUpdate = async ({
-    date
-  }: {
-    date: string
-  }) => {
-    try {
-
-      if (!userData) throw new Error('Ha ocurrido un error de autenticación');
-
-    //
-
-      toast({
-        title: "Correcto",
-        description: "Categoría actualizada con éxito",
-      })
-
-      reload()
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Ha ocurrido un error",
-        description: error.message,
-      })
-    }
-  }
 
   // @ts-ignore
   const handleDelete = async ({
@@ -63,12 +40,25 @@ export default function EquityStatementsTable({ data, userData, reload }: Props)
     try {
 
       if (!userData) throw new Error('Ha ocurrido un error de autenticación');
+      const dateFormatted = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
 
-        //
+      const statementsResponse = await getEquityStatements(
+        userData.user.token,
+        dateFormatted
+      )
+
+      if(statementsResponse.data.length > 0){
+        statementsResponse.data.forEach((statement: EquityStatement) => {
+          destroyEquityStatement({
+            token: userData.user.token,
+            statementId: statement.id
+          })
+        })
+      }
 
       toast({
         title: "Correcto",
-        description: "Categoría eliminada con éxito",
+        description: "Datos eliminados con éxito",
       })
 
       reload()
@@ -89,12 +79,12 @@ export default function EquityStatementsTable({ data, userData, reload }: Props)
     },
     {
       accessorKey: "totalEquity",
-      header: "amount",
+      header: "Cantidad",
     },
     {
       header: "Acciones",
       accessorKey: "actions",
-      cell: ({ row }) => <EquityStatementActions row={row} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+      cell: ({ row }) => <EquityStatementActions row={row} handleDelete={handleDelete} handleDisplayForm={handleDisplayForm} />
     }
   ]
 
@@ -114,18 +104,14 @@ interface EquityStatementActionsProps {
     }: {
       date: string
     }) => void,
-    readonly handleUpdate: ({
-      date
-    }: {
-        date: string
-    }) => void
+    readonly handleDisplayForm: (date: Date) => void
   }
   
-  const EquityStatementActions = ({ row, handleUpdate, handleDelete }: EquityStatementActionsProps) => {
+  const EquityStatementActions = ({ row, handleDisplayForm, handleDelete }: EquityStatementActionsProps) => {
   
     return (
       <div className="flex space-x-4">
-        <PencilIcon onClick={() => handleUpdate(row.original.date)} className="cursor-pointer h-4 w-4 text-blue-500" />
+        <PencilIcon onClick={() => handleDisplayForm(moment(row.original.date, 'DD-MM-YYYY').toDate())} className="cursor-pointer h-4 w-4 text-blue-500" />
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <TrashIcon className="cursor-pointer h-4 w-4 text-red-500" />
