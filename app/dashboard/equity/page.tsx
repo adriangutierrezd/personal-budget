@@ -61,7 +61,7 @@ export default function EquityPage() {
     }
 
     return (
-        <main className="p-6 max-w-7xl mx-auto">
+        <>
             <h1 className="text-2xl font-bold mb-4">Patrimonio</h1>
             {displayForm ? (<EquityStatementForm selectedDate={selectedDate} userData={userData} handleBackToTable={handleBackToTable} reload={fetchData} />) :
                 (
@@ -83,6 +83,6 @@ export default function EquityPage() {
 
 
                 )}
-        </main>
+        </>
     )
 }

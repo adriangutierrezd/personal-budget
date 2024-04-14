@@ -120,7 +120,7 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
 
     return (
         <>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between space-x-2 mb-3">
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
@@ -150,7 +150,7 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
                     <ArrowUturnLeftIcon className="w-4 h-4" />
                 </Button>
             </div>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-col md:flex-row space-y-3 items-end md:items-start justify-between mb-3">
                 <p>Valor total: {totalValue.toLocaleString('es-ES')} €</p>
                 <EquityStatementDialog handleStatementsChange={handleStatementsChange} id={null} categories={categories} defaultValues={{}} userData={userData} date={date} trigger={<Button type="button">
                     Añadir registro
@@ -164,24 +164,30 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
 
 
             <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2 md:col-span-1">
-                    <h2 className="font-semibold">
-                        Distribución de activos
-                    </h2>
-                    <div>
-                        <EquityStatementDoughnut rawData={assetStatements} />
+                {assetStatements.length > 0 && (
+                    <div className="col-span-2 md:col-span-1">
+                        <h2 className="font-semibold">
+                            Distribución de activos
+                        </h2>
+                        <div>
+                            <EquityStatementDoughnut rawData={assetStatements} />
+                        </div>
                     </div>
-                </div>
+                )}
 
 
-                <div className="col-span-2 md:col-span-1">
-                    <h2 className="font-semibold">
-                        Distribución de pasivos
-                    </h2>
-                    <div>
-                        <EquityStatementDoughnut rawData={liabilityStatements} />
+                {liabilityStatements.length > 0 && (
+                    <div className="col-span-2 md:col-span-1">
+                        <h2 className="font-semibold">
+                            Distribución de pasivos
+                        </h2>
+                        <div>
+                            <EquityStatementDoughnut rawData={liabilityStatements} />
+                        </div>
                     </div>
-                </div>
+                )}
+
+
 
             </div>
         </>

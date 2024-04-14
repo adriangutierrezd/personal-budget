@@ -144,9 +144,7 @@ export default function RevenuesTable({ data, userData, reload }: Props) {
   ]
 
   return (
-    <div className="py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <DataTable columns={columns} data={data} />
   )
 }
 

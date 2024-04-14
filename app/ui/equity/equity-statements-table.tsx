@@ -90,9 +90,7 @@ export default function EquityStatementsTable({ data, userData, reload, handleDi
 
 
   return (
-    <div className="mx-auto py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <DataTable columns={columns} data={data} />
   )
 }
 

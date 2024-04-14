@@ -69,7 +69,7 @@ export default function ExpensesPage() {
   }, [])
 
   return (
-    <main className="p-6 max-w-7xl mx-auto">
+    <>
       <h1 className="text-2xl font-bold mb-4">Gastos</h1>
       <section className="flex items-center justify-end mb-4">
         <NewExpenseDialog categories={categories} userData={userData} reload={fetchData} />
@@ -92,11 +92,11 @@ export default function ExpensesPage() {
               {date?.from ? (
                 date.to ? (
                   <>
-                    {format(date.from, "LLL dd, y")} -{" "}
-                    {format(date.to, "LLL dd, y")}
+                    {format(date.from, "LLL dd, y", {locale: es})} -{" "}
+                    {format(date.to, "LLL dd, y", {locale: es})}
                   </>
                 ) : (
-                  format(date.from, "LLL dd, y")
+                  format(date.from, "LLL dd, y", {locale: es})
                 )
               ) : (
                 <span>Selecciona un rango de fechas</span>
@@ -127,6 +127,6 @@ export default function ExpensesPage() {
       ) : (
         <ExpensesTable categories={categories} userData={userData} reload={fetchData} data={expenses} />
       )}
-    </main>
+    </>
   )
 }

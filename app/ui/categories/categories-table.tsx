@@ -149,9 +149,7 @@ export default function CategoriesTable({ data, userData, reload }: Props) {
 
 
   return (
-    <div className="mx-auto py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <DataTable columns={columns} data={data} />
   )
 }
 

@@ -37,9 +37,12 @@ const handler = NextAuth({
       session.user = token as any;
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      return process.env.NEXT_AUTH_PUBLIC_URL ?? baseUrl
+    },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/login"
   },
 });
 

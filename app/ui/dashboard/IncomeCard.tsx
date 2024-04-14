@@ -23,7 +23,6 @@ export default function IncomeCard(){
         const expenses = await getRevenues(data.user.token, startOfMonth, endOfMonth)
         let income = 0
         expenses.data.forEach((e: Expense) => {
-            console.log(e)
             income += e.amount
         })
         setTotalIncome(income)        

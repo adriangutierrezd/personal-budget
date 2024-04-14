@@ -85,11 +85,9 @@ export default function Dashboard() {
 
 
   return (
-    <main className="p-6">
-      <section className="max-w-7xl mx-auto">
+    <>
         <h1 className="text-2xl font-bold mb-4">Panel de control</h1>
-      </section>
-  
+
       {isLoading ? (
         <>
           <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3 mb-4">
@@ -116,6 +114,6 @@ export default function Dashboard() {
           <ExpensesTable categories={categories} userData={userData} reload={fetchData} data={expenses} />
         </>
       )}
-    </main>
+    </>
   );
 }

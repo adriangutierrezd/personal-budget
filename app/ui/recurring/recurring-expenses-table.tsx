@@ -140,9 +140,7 @@ export default function RecurringExpensesTable({data, categories, userData, relo
   ]
 
   return (
-    <div className="mx-auto py-10">
     <DataTable columns={columns} data={data} />
-    </div>
   )
 }
 

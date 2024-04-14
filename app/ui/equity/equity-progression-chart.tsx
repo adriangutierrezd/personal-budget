@@ -49,9 +49,6 @@ interface Props {
 
 export function EquityProgessionChart({ rawData }: Props) {
 
-    console.log(rawData)
-
-
     const labels = rawData.map((data) => data.date)
 
     const data = {

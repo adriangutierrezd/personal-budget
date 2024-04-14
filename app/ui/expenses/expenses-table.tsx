@@ -155,9 +155,7 @@ export default function ExpensesTable({data, categories, userData, reload}: Prop
   ]
 
   return (
-    <div className="mx-auto py-10">
     <DataTable columns={columns} data={data} />
-    </div>
   )
 }
 

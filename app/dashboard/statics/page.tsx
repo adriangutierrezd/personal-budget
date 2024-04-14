@@ -108,7 +108,7 @@ export default function StaticsPage() {
   }, [])
 
   return (
-    <main className="p-6 max-w-7xl mx-auto">
+    <>
       <h1 className="text-2xl font-bold mb-4">Estadísticas</h1>
       <div className="flex items-center space-x-4 justify-end">
         <Popover>
@@ -128,11 +128,11 @@ export default function StaticsPage() {
               {date?.from ? (
                 date.to ? (
                   <>
-                    {format(date.from, "LLL dd, y")} -{" "}
-                    {format(date.to, "LLL dd, y")}
+                    {format(date.from, "LLL dd, y", {locale: es})} -{" "}
+                    {format(date.to, "LLL dd, y", {locale: es})}
                   </>
                 ) : (
-                  format(date.from, "LLL dd, y")
+                  format(date.from, "LLL dd, y", {locale: es})
                 )
               ) : (
                 <span>Selecciona un rango de fechas</span>
@@ -162,6 +162,6 @@ export default function StaticsPage() {
       <ExpensesByCategory expensesByCategory={expensesByCategory} />
       <h2 className="font-semibold my-3">Progresión de patrimonio</h2>
       <EquityProgessionChart rawData={equityPerDate} />
-    </main>
+    </>
   )
 }

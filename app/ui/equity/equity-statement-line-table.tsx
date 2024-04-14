@@ -50,9 +50,7 @@ export default function EquityStatementLineTable({ data, date, categories, handl
 
 
   return (
-    <div className="mx-auto py-10">
       <DataTable columns={columns} data={data} />
-    </div>
   )
 }
 
