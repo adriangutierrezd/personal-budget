@@ -88,6 +88,7 @@ export default function NewCategoryDialog({ userData, reload }: Props) {
         token: userData.user.token,
         props: values
       })
+      setOpen(false)
       reload()
       reset({})
     } catch (error: any) {
