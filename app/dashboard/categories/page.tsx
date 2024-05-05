@@ -45,7 +45,7 @@ export default function CategoriesPage() {
       </section>
 
       {isLoading ? (
-        <div className="mx-auto py-10">
+        <div className="py-10">
           <TableSkeleton columns={['Nombre', 'Color', 'Acciones']} />
         </div>
       ) : (

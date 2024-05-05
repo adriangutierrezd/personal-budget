@@ -98,7 +98,7 @@ export default function Dashboard() {
   
           <Skeleton className="h-32 w-100 mb-4" />
           
-          <div className="mx-auto py-10">
+          <div className="py-10">
             <TableSkeleton columns={['Concepto', 'Fecha', 'Categoría', 'Cantidad', 'Acciones']} />
           </div>
         </>

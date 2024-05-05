@@ -62,7 +62,7 @@ export default function RecurringPage() {
 
 
             {isLoading ? (
-                <div className="mx-auto py-10">
+                <div className="py-10">
                     <TableSkeleton columns={['Concepto', 'Categoría', 'Cantidad', 'Acciones']} />
                 </div>
             ) : (

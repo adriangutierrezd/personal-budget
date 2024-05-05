@@ -73,7 +73,7 @@ export default function EquityPage() {
                         </section>
 
                         {isLoading ? (
-                            <div className="mx-auto py-10">
+                            <div className="py-10">
                                 <TableSkeleton columns={['Fecha', 'Patrimonio', 'Acciones']} />
                             </div>
                         ) : (
