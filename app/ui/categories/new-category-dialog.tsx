@@ -89,6 +89,7 @@ export default function NewCategoryDialog({ userData, reload }: Props) {
         props: values
       })
       setOpen(false)
+      setOpenDesktop(false)
       reload()
       reset({})
     } catch (error: any) {

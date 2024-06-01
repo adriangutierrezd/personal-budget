@@ -23,7 +23,6 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [categories, setCategories] = useState<Category[]>([])
   const [expenses, setExpenses] = useState<Array<Expense>>([])
-  const [revenues, setRevenues] = useState<Array<Revenue>>([])
   const [totalRevenue, setTotalRevenue] = useState<number>(0)
   const [totalExpense, setTotalExpense] = useState<number>(0)
   const [totalSaved, setTotalSaved] = useState<number>(0)
@@ -56,8 +55,7 @@ export default function Dashboard() {
         }
       }))
 
-      setCategories(categoriesData.data)
-      setRevenues(revenuesData.data)
+      setCategories(categoriesData.data.filter((category: Category) => category.type === 'EXPENSES'))
       setExpensesByCategory(expenseByCategory.data)
       const { expensesSum, revenuesSum, saved } = getMainDataFromMonth(expensesData.data, revenuesData.data)
       setTotalExpense(expensesSum)
