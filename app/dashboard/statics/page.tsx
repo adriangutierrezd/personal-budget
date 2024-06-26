@@ -92,7 +92,7 @@ export default function StaticsPage() {
           ...r,
           earnedAmount: r.earnedAmount ? r.earnedAmount.toLocaleString('es-ES') : 0,
           spentAmount: r.spentAmount ? r.spentAmount.toLocaleString('es-ES') : 0,
-          savedPercentage: `${revExp[0].savedPercentage.toString().replace('.', ',')} %`,
+          savedPercentage: `${r.savedPercentage.toString().replace('.', ',')} %`,
           totalSaved: r.totalSaved.toLocaleString('es-ES'),
         }
       }))
