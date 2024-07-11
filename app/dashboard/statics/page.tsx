@@ -15,14 +15,13 @@ import {
 import { ArrowPathIcon } from "@heroicons/react/24/outline"
 import { getSession } from "next-auth/react"
 import { getExpensesByCategory, getExpensesByMonth } from "@/lib/services/expenseService"
-// import RevenuesExpensesByMonth from "@/app/ui/statics/revenues-expenses-by-month-chart"
 import { getRevenuesByMonth } from "@/lib/services/revenueService"
 import { MONTHS } from "@/lib/constants"
 import RevenuesExpensesByMonthTable from "@/app/ui/statics/revenues-expenses-by-month-table"
 import { EquityPerDate, MonthData, MonthRawData } from "@/types/api"
 import { getEquityPerDate } from "@/lib/services/equityService"
 import { ExpensesByCategory } from "@/app/ui/dashboard/ExpensesByCategory"
-import { RevenuesExpensesByMonth } from "@/app/ui/statics/RevenuesExpensesByMonthChart"
+import { RevenuesExpensesByMonthChart } from "@/app/ui/statics/RevenuesExpensesByMonthChart"
 import { EquityProgressionChart } from "@/app/ui/equity/EquityProgressionChart"
 
 export default function StaticsPage() {
@@ -32,7 +31,6 @@ export default function StaticsPage() {
   startDate.startOf('month');
   const endDate = today.clone().endOf('month');
 
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [expensesByMonth, setExpensesByMonth] = useState<Array<any>>([])
   const [revenuesByMonth, setRevenuesByMonth] = useState<Array<any>>([])
   const [expensesByCategory, setExpensesByCategory] = useState<Array<any>>([])
@@ -44,8 +42,6 @@ export default function StaticsPage() {
   })
 
   const fetchData = async () => {
-    setIsLoading(true)
-
     const data = await getSession()
 
     if (data && date) {
@@ -99,8 +95,6 @@ export default function StaticsPage() {
       }))
 
     }
-
-    setIsLoading(false)
   }
 
 
@@ -156,7 +150,7 @@ export default function StaticsPage() {
           <ArrowPathIcon className="h-4 w-4" />
         </Button>
       </div>
-      <RevenuesExpensesByMonth expensesByMonth={expensesByMonth} revenuesByMonth={revenuesByMonth} />
+      <RevenuesExpensesByMonthChart expensesByMonth={expensesByMonth} revenuesByMonth={revenuesByMonth} />
       <RevenuesExpensesByMonthTable data={revExpData} />
       <ExpensesByCategory expensesByCategory={expensesByCategory} />
       <EquityProgressionChart rawData={equityPerDate} />

@@ -1,5 +1,7 @@
 "use client"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+
 import {
   Card,
   CardContent,
@@ -16,23 +18,24 @@ import { MONTHS } from "@/lib/constants"
 
 
 const chartConfig = {
-  revenues: {
-    label: "Ingresos",
-    color: "#1A6BD8",
-  },
-  expenses: {
-    label: "Gastos",
-    color: "#EB4936",
-  },
-} satisfies ChartConfig
-
+    revenues: {
+      label: "Ingresos",
+      color: "#1A6BD8",
+    },
+    expenses: {
+      label: "Gastos",
+      color: "#EB4936",
+    },
+  } satisfies ChartConfig
+  
 
 interface Props {
-  readonly expensesByMonth: any[],
-  readonly revenuesByMonth: any[]
-}
+    readonly expensesByMonth: any[],
+    readonly revenuesByMonth: any[]
+  }
 
-const getChartData = ({ expensesByMonth, revenuesByMonth }: Props) => {
+
+  const getChartData = ({ expensesByMonth, revenuesByMonth }: Props) => {
   const chData: any[] = [];
 
   expensesByMonth.forEach((e: any) => {
@@ -73,26 +76,20 @@ const getChartData = ({ expensesByMonth, revenuesByMonth }: Props) => {
 
   return chData;
 };
+  
 
+export function RevenuesExpensesByMonthChart({ expensesByMonth, revenuesByMonth }: Props) {
 
-
-export function RevenuesExpensesByMonth({ expensesByMonth, revenuesByMonth }: Props) {
-
-
-  const chartData = getChartData({ expensesByMonth, revenuesByMonth })
-
-
+    const chartData = getChartData({ expensesByMonth, revenuesByMonth })
+    
   return (
     <Card>
       <CardHeader>
         <CardTitle>Ingresos y gastos</CardTitle>
-        {/* <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <AreaChart
+          <LineChart
             accessibilityLayer
             data={chartData}
             margin={{
@@ -106,29 +103,23 @@ export function RevenuesExpensesByMonth({ expensesByMonth, revenuesByMonth }: Pr
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" />}
-            />
-            <Area
-              dataKey="expenses"
-              type="natural"
-              fill="var(--color-expenses)"
-              fillOpacity={0.4}
-              stroke="var(--color-expenses)"
-              stackId="a"
-            />
-            <Area
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <Line
               dataKey="revenues"
-              type="natural"
-              fill="var(--color-revenues)"
-              fillOpacity={0.4}
+              type="monotone"
               stroke="var(--color-revenues)"
-              stackId="a"
+              strokeWidth={2}
+              dot={false}
             />
-          </AreaChart>
+            <Line
+              dataKey="expenses"
+              type="monotone"
+              stroke="var(--color-expenses)"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
         </ChartContainer>
       </CardContent>
     </Card>
