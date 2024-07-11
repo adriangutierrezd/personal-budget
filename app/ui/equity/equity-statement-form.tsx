@@ -20,7 +20,7 @@ import moment from "moment";
 import { toast } from "@/components/ui/use-toast";
 import { getCategories } from "@/lib/services/categoriesService";
 import EquityStatementDialog from "./equity-statement-dialog";
-import { EquityStatementDoughnut } from "./equity-statement-doughnut";
+import { EquityStatementDoughnut } from "./EquityStatementDoughnut";
 
 interface Props {
     readonly userData: Session | undefined;
@@ -166,11 +166,8 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
             <div className="grid grid-cols-2 gap-4">
                 {assetStatements.length > 0 && (
                     <div className="col-span-2 md:col-span-1">
-                        <h2 className="font-semibold">
-                            Distribución de activos
-                        </h2>
                         <div>
-                            <EquityStatementDoughnut rawData={assetStatements} />
+                            <EquityStatementDoughnut rawData={assetStatements} title="Distribución de activos" />
                         </div>
                     </div>
                 )}
@@ -178,11 +175,8 @@ export default function EquityStatementForm({ userData, handleBackToTable, reloa
 
                 {liabilityStatements.length > 0 && (
                     <div className="col-span-2 md:col-span-1">
-                        <h2 className="font-semibold">
-                            Distribución de pasivos
-                        </h2>
                         <div>
-                            <EquityStatementDoughnut rawData={liabilityStatements} />
+                            <EquityStatementDoughnut title="Distribución de pasivos" rawData={liabilityStatements} />
                         </div>
                     </div>
                 )}
