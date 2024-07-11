@@ -15,14 +15,15 @@ import {
 import { ArrowPathIcon } from "@heroicons/react/24/outline"
 import { getSession } from "next-auth/react"
 import { getExpensesByCategory, getExpensesByMonth } from "@/lib/services/expenseService"
-import ExpensesByCategory from "@/app/ui/dashboard/expenses-by-category"
-import RevenuesExpensesByMonth from "@/app/ui/statics/revenues-expenses-by-month-chart"
+// import RevenuesExpensesByMonth from "@/app/ui/statics/revenues-expenses-by-month-chart"
 import { getRevenuesByMonth } from "@/lib/services/revenueService"
 import { MONTHS } from "@/lib/constants"
 import RevenuesExpensesByMonthTable from "@/app/ui/statics/revenues-expenses-by-month-table"
 import { EquityPerDate, MonthData, MonthRawData } from "@/types/api"
-import { EquityProgessionChart } from "@/app/ui/equity/equity-progression-chart"
 import { getEquityPerDate } from "@/lib/services/equityService"
+import { ExpensesByCategory } from "@/app/ui/dashboard/ExpensesByCategory"
+import { RevenuesExpensesByMonth } from "@/app/ui/statics/RevenuesExpensesByMonthChart"
+import { EquityProgressionChart } from "@/app/ui/equity/EquityProgressionChart"
 
 export default function StaticsPage() {
 
@@ -155,13 +156,10 @@ export default function StaticsPage() {
           <ArrowPathIcon className="h-4 w-4" />
         </Button>
       </div>
-      <h2 className="font-semibold my-3">Ingresos y gastos por mes</h2>
       <RevenuesExpensesByMonth expensesByMonth={expensesByMonth} revenuesByMonth={revenuesByMonth} />
       <RevenuesExpensesByMonthTable data={revExpData} />
-      <h2 className="font-semibold my-3">Gastos totales por categoría</h2>
       <ExpensesByCategory expensesByCategory={expensesByCategory} />
-      <h2 className="font-semibold my-3">Progresión de patrimonio</h2>
-      <EquityProgessionChart rawData={equityPerDate} />
+      <EquityProgressionChart rawData={equityPerDate} />
     </>
   )
 }

@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useState } from "react";
-import ExpensesByCategory from "../ui/dashboard/expenses-by-category";
 import StatsCards from "../ui/dashboard/StatsCards";
 import ExpensesTable from "../ui/expenses/expenses-table";
 import { getSession } from "next-auth/react";
@@ -13,6 +12,7 @@ import { getCategories } from "@/lib/services/categoriesService";
 import NewExpenseDialog from "../ui/expenses/new-expense-dialog";
 import { TableSkeleton } from "../ui/components/Skeletons";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ExpensesByCategory } from "../ui/dashboard/ExpensesByCategory";
 
 export default function Dashboard() {
 
@@ -104,7 +104,7 @@ export default function Dashboard() {
         <>
           <StatsCards totalSaved={totalSaved} totalExpense={totalExpense} totalRevenue={totalRevenue} />
           <ExpensesByCategory expensesByCategory={expensesByCategory} />
-  
+
           <div className="flex justify-end">
             <NewExpenseDialog categories={categories} userData={userData} reload={fetchData} />
           </div>
