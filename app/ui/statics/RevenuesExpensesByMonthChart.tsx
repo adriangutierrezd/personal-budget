@@ -18,70 +18,77 @@ import { MONTHS } from "@/lib/constants"
 
 
 const chartConfig = {
-    revenues: {
-      label: "Ingresos",
-      color: "#1A6BD8",
-    },
-    expenses: {
-      label: "Gastos",
-      color: "#EB4936",
-    },
-  } satisfies ChartConfig
-  
+  revenues: {
+    label: "Ingresos",
+    color: "#1A6BD8",
+  },
+  expenses: {
+    label: "Gastos",
+    color: "#EB4936",
+  },
+} satisfies ChartConfig
+
 
 interface Props {
-    readonly expensesByMonth: any[],
-    readonly revenuesByMonth: any[]
-  }
+  readonly expensesByMonth: any[],
+  readonly revenuesByMonth: any[]
+}
 
 
-  const getChartData = ({ expensesByMonth, revenuesByMonth }: Props) => {
+const getChartData = ({ expensesByMonth, revenuesByMonth }: Props) => {
   const chData: any[] = [];
 
   expensesByMonth.forEach((e: any) => {
+    const { yearMonth, total } = e;
     const monthName = MONTHS[e.month - 1];
-    const monthIndex = chData.findIndex((v: any) => v.month === monthName);
+    const monthIndex = chData.findIndex((v: any) => v.yearMonth === yearMonth);
 
     if (monthIndex !== -1) {
       chData[monthIndex] = {
         ...chData[monthIndex],
-        expenses: e.total
+        expenses: total
       };
     } else {
       chData.push({
+        yearMonth,
         month: monthName,
-        revenues: 0,
-        expenses: e.total
+        year: e.year,
+        expenses: total,
+        revenues: 0
       });
     }
   });
 
   revenuesByMonth.forEach((r: any) => {
+    const { yearMonth, total } = r;
     const monthName = MONTHS[r.month - 1];
-    const monthIndex = chData.findIndex((v: any) => v.month === monthName);
+    const monthIndex = chData.findIndex((v: any) => v.yearMonth === yearMonth);
 
     if (monthIndex !== -1) {
       chData[monthIndex] = {
         ...chData[monthIndex],
-        revenues: r.total
+        revenues: total
       };
     } else {
       chData.push({
+        yearMonth,
         month: monthName,
+        year: r.year,
         expenses: 0,
-        revenues: r.total
+        revenues: total
       });
     }
   });
 
   return chData;
 };
-  
+
 
 export function RevenuesExpensesByMonthChart({ expensesByMonth, revenuesByMonth }: Props) {
 
-    const chartData = getChartData({ expensesByMonth, revenuesByMonth })
-    
+  const chartData = getChartData({ expensesByMonth, revenuesByMonth })
+
+  console.log(chartData)
   return (
     <Card>
       <CardHeader>
